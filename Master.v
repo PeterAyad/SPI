@@ -10,8 +10,10 @@ module Master(dataIN,dataOUT,slaveno,enable,reset,cpha,cpol,miso,mosi,clk,cs0,cs
 
   assign dataOUT = data;
 
-  always @ (posedge clk)
+  always @ (posedge clk or negedge clk)
     begin
+      if (clk == 1)
+        begin
       if (reset)
         begin
           data <= 8'b00000000; 
@@ -59,8 +61,7 @@ module Master(dataIN,dataOUT,slaveno,enable,reset,cpha,cpol,miso,mosi,clk,cs0,cs
         cs2 <= 1'b1;
       end
     end
-
-  always @ (negedge clk)
+  else if(clk == 0)
     begin
       if (reset)
         begin
@@ -108,5 +109,6 @@ module Master(dataIN,dataOUT,slaveno,enable,reset,cpha,cpol,miso,mosi,clk,cs0,cs
         cs1 <= 1'b1;
         cs2 <= 1'b1;
       end
+    end
     end
 endmodule
